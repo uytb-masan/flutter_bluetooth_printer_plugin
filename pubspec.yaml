@@ -1,4 +1,5 @@
 name: flutter_bluetooth_printer
+version: 2.19.0
 
 environment:
   sdk: ">=2.17.5 <4.0.0"
