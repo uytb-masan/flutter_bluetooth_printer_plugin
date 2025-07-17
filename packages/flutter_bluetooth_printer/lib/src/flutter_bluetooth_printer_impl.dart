@@ -21,24 +21,38 @@ enum PaperSize {
 }
 
 class FlutterBluetoothPrinter {
-  static Stream<DiscoveryState> _discovery() async* {
+  static StreamController<DiscoveryState>? _controller;
+
+  static Stream<DiscoveryState> startDiscovery() {
+    _controller?.close();
+    _controller = StreamController<DiscoveryState>();
+
     final result = <BluetoothDevice>[];
-    await for (final state
-        in FlutterBluetoothPrinterPlatform.instance.discovery) {
+
+    FlutterBluetoothPrinterPlatform.instance.discovery.listen((state) {
+      if (_controller?.isClosed ?? true) return;
+
       if (state is BluetoothDevice) {
         result.add(state);
-        yield DiscoveryResult(devices: result.toSet().toList());
+        _controller?.add(DiscoveryResult(devices: result.toSet().toList()));
       } else {
         result.clear();
-        yield state;
+        _controller?.add(state);
       }
-    }
+    });
+
+    return _controller!.stream;
+  }
+
+  static void stopDiscovery() {
+    _controller?.close();
+    _controller = null;
   }
 
   static ValueNotifier<BluetoothConnectionState> get connectionStateNotifier =>
       FlutterBluetoothPrinterPlatform.instance.connectionStateNotifier;
 
-  static Stream<DiscoveryState> get discovery => _discovery();
+  static Stream<DiscoveryState> get discovery => startDiscovery();
 
   static Future<bool> printBytes({
     required String address,
