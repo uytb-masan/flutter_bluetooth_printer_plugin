@@ -62,4 +62,9 @@ class CUPSPrinterDriver extends FlutterBluetoothPrinterPlatform {
   Future<BluetoothState> checkState() async  {
     return BluetoothState.enabled;
   }
+
+  @override
+  Future<void> cancelDiscovery() async {
+    // No discovery to cancel in CUPS
+  }
 }
