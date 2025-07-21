@@ -52,6 +52,7 @@ abstract class FlutterBluetoothPrinterPlatform extends PlatformInterface {
 
   Future<bool> connect(String address);
   Future<bool> disconnect(String address);
+  Future<void> cancelDiscovery();
   Future<BluetoothState> checkState();
 }
 

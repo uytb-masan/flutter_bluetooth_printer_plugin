@@ -132,7 +132,7 @@ public class FlutterBluetoothPrinterPlugin implements FlutterPlugin, ActivityAwa
                 if (!request) return false;
                 activity.requestPermissions(new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT}, 919191);
             } else {
-                if(activity == null){
+                if (activity == null) {
                     return false;
                 }
 
@@ -336,6 +336,12 @@ public class FlutterBluetoothPrinterPlugin implements FlutterPlugin, ActivityAwa
                         }
                     }
                 }).start();
+                return;
+            }
+
+            case "stopDiscovery": {
+                sinkList.clear();
+                stopDiscovery();
                 return;
             }
 

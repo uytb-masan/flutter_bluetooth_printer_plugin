@@ -155,6 +155,12 @@ class MethodChannelBluetoothPrinter extends FlutterBluetoothPrinterPlatform {
   }
 
   @override
+  Future<void> cancelDiscovery() async {
+    print("Cancelling discovery...");
+    await channel.invokeMethod('stopDiscovery');
+  }
+
+  @override
   Future<bool> disconnect(String address) async {
     final res = await channel.invokeMethod('disconnect', {
       'address': address,

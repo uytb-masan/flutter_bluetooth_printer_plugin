@@ -182,4 +182,8 @@ class FlutterBluetoothPrinter {
   static Future<BluetoothState> getState() async {
     return FlutterBluetoothPrinterPlatform.instance.checkState();
   }
+
+  static Future<void> cancelDiscovery() async {
+    return FlutterBluetoothPrinterPlatform.instance.cancelDiscovery();
+  }
 }

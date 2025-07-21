@@ -129,6 +129,10 @@ public class SwiftFlutterBluetoothPrinterPlugin: NSObject, FlutterPlugin, Flutte
 
               result(false)
               break
+          case "stopDiscovery":
+                self.onCancel(withArguments: nil)
+                break
+          break
 
           case "write":
               let parameter = call.arguments as! NSDictionary
