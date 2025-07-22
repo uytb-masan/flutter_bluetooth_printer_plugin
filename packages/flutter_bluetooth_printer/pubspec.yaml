@@ -40,8 +40,8 @@ flutter:
         default_package: flutter_bluetooth_printer_web
 
   fonts:
-    - family: Receipt
+    - family: Roboto
       fonts:
-        - asset: fonts/JetBrainsMono-Regular.ttf
-        - asset: fonts/JetBrainsMono-ExtraBold.ttf
+        - asset: fonts/Roboto-Regular.ttf
+        - asset: fonts/Roboto-ExtraBold.ttf
           weight: 600
