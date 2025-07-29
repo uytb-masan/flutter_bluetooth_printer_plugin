@@ -13,10 +13,13 @@ class BluetoothCentralManagerDelegate: NSObject, CBCentralManagerDelegate {
     var peripheralDelegate: BluetoothPeripheralDelegate?
 
     open var centralManagerDidUpdateState: ((CBCentralManager) -> ())?
-    open var centralManagerDidDiscoverPeripheralWithAdvertisementDataAndRSSI: ((CBCentralManager, CBPeripheral, [String : Any], NSNumber) -> ())?
+    open var centralManagerDidDiscoverPeripheralWithAdvertisementDataAndRSSI:
+        ((CBCentralManager, CBPeripheral, [String: Any], NSNumber) -> ())?
     open var centralManagerDidConnectPeripheral: ((CBCentralManager, CBPeripheral) -> ())?
-    open var centralManagerDidFailToConnectPeripheralWithError: ((CBCentralManager, CBPeripheral, Error?) -> ())?
-    open var centralManagerDidDisConnectPeripheralWithError: ((CBCentralManager, CBPeripheral, Error?) -> ())?
+    open var centralManagerDidFailToConnectPeripheralWithError:
+        ((CBCentralManager, CBPeripheral, Error?) -> ())?
+    open var centralManagerDidDisConnectPeripheralWithError:
+        ((CBCentralManager, CBPeripheral, Error?) -> ())?
 
     typealias PeripheralChangeBlock = (UUID) -> ()
 
@@ -72,16 +75,23 @@ class BluetoothCentralManagerDelegate: NSObject, CBCentralManagerDelegate {
         }
     }
 
-    public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-
+    public func centralManager(
+        _ central: CBCentralManager, didDiscover peripheral: CBPeripheral,
+        advertisementData: [String: Any], rssi RSSI: NSNumber
+    ) {
+        print("Device found:", peripheral.name ?? "Unnamed")
+        if let uuids = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
+            print("Services:", uuids.map { $0.uuidString })
+        }
         guard let serviceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID],
             let isConnectable = advertisementData[CBAdvertisementDataIsConnectable] as? NSNumber,
-            serviceUUIDs.count > 0, isConnectable == 1 else {
-                return
+            serviceUUIDs.count > 0, isConnectable == 1
+        else {
+            return
         }
 
         // if peripheral doesn't container specified services, ignore.
-        let peripheralServiceSet = Set(serviceUUIDs.map { $0.uuidString } )
+        let peripheralServiceSet = Set(serviceUUIDs.map { $0.uuidString })
 
         guard peripheralServiceSet.intersection(services).count > 0 else {
 
@@ -90,13 +100,15 @@ class BluetoothCentralManagerDelegate: NSObject, CBCentralManagerDelegate {
 
         self[peripheral.identifier] = peripheral
 
-        if let uuid = UserDefaults.standard.object(forKey: UserDefaultKey.autoConectUUID) as? String {
+        if let uuid = UserDefaults.standard.object(forKey: UserDefaultKey.autoConectUUID) as? String
+        {
             if peripheral.identifier.uuidString == uuid {
                 //central.connect(peripheral, options: nil)
             }
         }
 
-        centralManagerDidDiscoverPeripheralWithAdvertisementDataAndRSSI?(central, peripheral, advertisementData, RSSI)
+        centralManagerDidDiscoverPeripheralWithAdvertisementDataAndRSSI?(
+            central, peripheral, advertisementData, RSSI)
     }
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
@@ -110,12 +122,16 @@ class BluetoothCentralManagerDelegate: NSObject, CBCentralManagerDelegate {
         //UserDefaults.standard.synchronize()
     }
 
-    public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+    public func centralManager(
+        _ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?
+    ) {
 
         centralManagerDidFailToConnectPeripheralWithError?(central, peripheral, error)
     }
 
-    public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+    public func centralManager(
+        _ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?
+    ) {
 
         centralManagerDidDisConnectPeripheralWithError?(central, peripheral, error)
     }
