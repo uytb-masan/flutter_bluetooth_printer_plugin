@@ -66,7 +66,7 @@ public protocol PrinterManagerDelegate: NSObjectProtocol {
 
 public extension BluetoothPrinterManager {
 
-    static var specifiedServices: Set<String> = ["18F0", "1955711A-268A-9F68-95BF-F6555D483CF2"]
+    static var specifiedServices: Set<String> = ["18F0", "1955711A-268A-9F68-95BF-F6555D483CF2", "E7810A71-73AE-499D-8C15- FAA9AEFO0C3F2"]
     static var specifiedCharacteristics: Set<String>?
 }
 
