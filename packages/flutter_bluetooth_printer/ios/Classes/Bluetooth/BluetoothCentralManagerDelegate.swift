@@ -79,10 +79,10 @@ class BluetoothCentralManagerDelegate: NSObject, CBCentralManagerDelegate {
         _ central: CBCentralManager, didDiscover peripheral: CBPeripheral,
         advertisementData: [String: Any], rssi RSSI: NSNumber
     ) {
-        print("Device found:", peripheral.name ?? "Unnamed")
-        if let uuids = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
-            print("Services:", uuids.map { $0.uuidString })
-        }
+//        print("Device found:", peripheral.name ?? "Unnamed")
+//        if let uuids = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
+//            print("Services:", uuids.map { $0.uuidString })
+//        }
         guard let serviceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID],
             let isConnectable = advertisementData[CBAdvertisementDataIsConnectable] as? NSNumber,
             serviceUUIDs.count > 0, isConnectable == 1
